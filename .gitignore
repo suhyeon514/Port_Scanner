@@ -1,0 +1,32 @@
+# Python cache and bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.env/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/project files
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+
+# Sensitive or environment-specific config
+config/settings.yaml
+.env
+
+# Test/output files
+*.out
+*.tmp
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
