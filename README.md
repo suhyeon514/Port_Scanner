@@ -79,31 +79,6 @@ logging:
 
 사용법, 구조, 설정 방법 등 프로젝트 설명을 여기에 작성하세요.
 
-PortScanner/
-├── main.py
-├── README.md
-├── requirements.txt
-├── config/
-│   └── settings.yaml
-├── core/
-│   ├── __init__.py
-│   ├── analyzer.py
-│   ├── analyzer_1.py
-│   ├── scanner.py
-│   ├── protocols/
-│   │   ├── __init__.py
-│   │   ├── base.py
-│   │   ├── dns.py
-│   │   └── telnet.py
-│   └── scan_types/
-│       ├── __init__.py
-│       ├── base.py
-│       ├── connect.py
-│       └── syn.py
-└── utils/
-    ├── __init__.py
-    ├── config_loader.py
-    ├── logger.py
 
 ## 폴더 및 파일별 설명
 
