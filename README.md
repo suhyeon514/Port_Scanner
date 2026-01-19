@@ -34,8 +34,7 @@ PortScanner/
 │   ├── logger.py
 │   └── validator.py
 └── logs/
-    ├── analyzer_log.json
-    ├── analyzer_log.txt
+    ├── application.log
 ```
 
 ## 설정 파일(config/settings.yaml) 예시 및 설명
@@ -131,11 +130,11 @@ logging:
 
 #### utils/
 - **config_loader.py**: 설정 파일(`settings.yaml`)을 로드하고 값을 가져오는 유틸리티.
-- **logger.py**: 중앙화된 로깅 설정을 제공하며, 모든 로그를 `logs/application.log`에 기록합니다.
-- **validator.py**: 입력값 검증 로직을 포함합니다.
+- **logger.py**: 중앙화된 로깅 설정을 제공하며, 모든 로그를 `logs/application.log`에 기록
+- **validator.py**: 입력값 검증 로직을 포함
 
 #### logs/
-- 스캔 및 디버깅 로그가 저장되는 디렉토리입니다. 기본적으로 `logs/application.log`에 모든 로그가 기록됩니다.
+- 스캔 및 디버깅 로그가 저장되는 디렉토리. 기본적으로 `logs/application.log`에 모든 로그가 기록
 
 
 
