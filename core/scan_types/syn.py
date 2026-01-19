@@ -15,19 +15,19 @@ class SynScanner(BaseScanner):
         # 3. 분석
         if response is None:
             return "Filtered"
-        
+
         if response.haslayer(TCP):
             tcp_layer = response.getlayer(TCP)
-            
+
             # SYN+ACK (Open)
             if tcp_layer.flags == 0x12:
                 # RST 보내서 연결 끊기 (Stealth)
                 rst_pkt = IP(dst=target_ip)/TCP(sport=src_port, dport=port, flags="R")
                 send(rst_pkt, verbose=0)
                 return "Open"
-            
+
             # RST+ACK (Closed)
             elif tcp_layer.flags == 0x14:
                 return "Closed"
-        
+
         return "Filtered"

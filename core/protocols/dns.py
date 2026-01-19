@@ -32,26 +32,44 @@ class DnsProtocol:
         return data
 
     def parse(self, data):
-        # DNS 응답에서 TXT 레코드 추출
         if not data or len(data) < 12:
             return 'DNS (No Response)'
-        # DNS 헤더는 12바이트
+            
         pos = 12
-        # QNAME 스킵
+        # Question Section 스킵
         while data[pos] != 0:
             pos += 1
-        pos += 5  # 0(QNAME 끝) + QTYPE(2) + QCLASS(2)
-        # Answer section
-        if pos + 10 > len(data):
-            return 'DNS (No Answer)'
-        # NAME(2) + TYPE(2) + CLASS(2) + TTL(4) + RDLENGTH(2)
-        pos += 10
-        if pos >= len(data):
-            return 'DNS (No TXT Record)'
-        txt_len = data[pos]
-        pos += 1
-        txt = data[pos:pos+txt_len]
+        pos += 5 
+        
+        # Answer Section
+        if pos >= len(data): return 'DNS (No Answer)'
+
+        # Name 필드 스킵 (압축 포인터 C0 xx 또는 일반 라벨)
+        # BIND 응답은 보통 C0 0C (2바이트)로 오지만, 안전하게 처리하려면:
+        if (data[pos] & 0xC0) == 0xC0:
+            pos += 2 # 포인터인 경우 2바이트 스킵
+        else:
+            while data[pos] != 0: pos += 1 # 포인터가 아니면 null 만날때까지
+            pos += 1
+            
+        # Type(2) + Class(2) + TTL(4) 스킵 = 8바이트
+        pos += 8
+        
+        # RDLENGTH (데이터 길이) 읽기 - 2바이트 Big Endian!
+        if pos + 2 > len(data): return 'DNS (Malformed)'
+        rd_len = struct.unpack('!H', data[pos:pos+2])[0]
+        pos += 2
+        
+        # 실제 TXT 데이터 읽기
+        # TXT 레코드는 맨 앞에 '문자열 길이(1byte)'가 포함될 수 있음 (BIND 버전에 따라 다름)
+        # 단순히 남은 데이터를 다 읽거나, rd_len 만큼 읽어서 출력 가능한 것만 필터링하는 게 안전
         try:
-            return 'DNS Version: ' + txt.decode(errors='ignore')
-        except:
-            return 'DNS Version: (decode error)'
+            txt_data = data[pos:pos+rd_len]
+            # TXT 레코드 내부의 첫 바이트가 길이일 수 있으므로 제거하거나 무시
+            if len(txt_data) > 0:
+                # 출력 가능한 문자만 필터링 (바이너리 찌꺼기 제거)
+                version = ''.join([chr(b) for b in txt_data if 32 <= b <= 126])
+                return f'DNS Version: {version}'
+            return 'DNS Version: (Empty)'
+        except Exception:
+            return 'DNS Version: (Parse Error)'

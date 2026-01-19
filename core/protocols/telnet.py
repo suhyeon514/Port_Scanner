@@ -6,7 +6,7 @@ from core.protocols.base import BaseProtocol
 class TelnetProtocol(BaseProtocol):
     def handle(self, s):
         """Telnet 전용 스마트 협상 로직"""
-        print(f"[DEBUG] TelnetProtocol 시작 (Port {self.port})")
+        # print(f"[DEBUG] TelnetProtocol 시작 (Port {self.port})")
         s.settimeout(1.0)
         total_data = b""
         max_loops = 5
