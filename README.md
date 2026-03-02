@@ -42,7 +42,7 @@ PortScanner/
 ```yaml
 # config/settings.yaml 예시
 target:
-  ip: "192.168.116.137"        # 단일 IP 또는 대역 (CIDR)
+  ip: "0.0.0.0"        # 단일 IP 또는 대역 (CIDR)
   ports: "22, 3306, 445, 23, 80, 53, 21, 25, 1-500" # 범위 및 특정 포트 혼용 가능
 
 scan_options:
